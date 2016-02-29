@@ -14,6 +14,7 @@ def sample_p_norm(p, N):
     if p == 2:
         return inversion_2_norm(N)
     else:
+        #Pick the proposal as (area_of_2_ball/area_of_p_ball)*P(x in 2_ball), thus always accept in the p-ball's support
         reject = lambda x1, x2: ((math.fabs(x1)**p) + (math.fabs(x2)**p))**(1/p) > 1
         coords = [(x1, x2) for (x1, x2) in inversion_2_norm(N) if not reject(x1, x2)]
         rejected = 1 - len(coords)/float(N)
@@ -25,7 +26,7 @@ ax1.set_aspect(1.0)
 ax2.set_aspect(1.0)
 ax3.set_aspect(1.0)
 
-N = 5000
+N = 2000
 coords1 = sample_p_norm(2, N)
 ax1.plot(np.array([c[0] for c in coords1]), np.array([c[1] for c in coords1]), '.')
 ax1.set_title('p = 2')
