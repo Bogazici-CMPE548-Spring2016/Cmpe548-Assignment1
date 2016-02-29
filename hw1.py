@@ -3,12 +3,45 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-r_inverse_cdf = lambda y: math.sqrt(y)
-theta_inverse_cdf = lambda y: 2 * y * math.pi
+def inversion_2_norm(N):
+    r_inverse_cdf = lambda y: math.sqrt(y)
+    theta_inverse_cdf = lambda y: 2 * y * math.pi
+    polars = [(r_inverse_cdf(np.random.uniform(0,1,1)[0]), theta_inverse_cdf(np.random.uniform(0,1,1)[0])) for i in range(N)]
+    coords = [(r*math.sin(theta), r*math.cos(theta)) for (r, theta) in polars]
+    return coords
 
-points = [(r_inverse_cdf(np.random.uniform(0,1,1)[0]), theta_inverse_cdf(np.random.uniform(0,1,1)[0])) for i in range(1000)]
-rs = np.array([p[0] for p in points])
-thetas = np.array([p[1] for p in points])
+def sample_p_norm(p, N):
+    if p == 2:
+        return inversion_2_norm(N)
+    else:
+        reject = lambda x1, x2: ((math.fabs(x1)**p) + (math.fabs(x2)**p))**(1/p) > 1
+        coords = [(x1, x2) for (x1, x2) in inversion_2_norm(N) if not reject(x1, x2)]
+        rejected = 1 - len(coords)/float(N)
+        return coords, rejected
 
-ax = plt.subplot(111, projection='polar')
-ax.plot(thetas, rs, '.')
+
+f, (ax1, ax2, ax3) = plt.subplots(1, 3)
+ax1.set_aspect(1.0)
+ax2.set_aspect(1.0)
+ax3.set_aspect(1.0)
+
+N = 5000
+coords1 = sample_p_norm(2, N)
+ax1.plot(np.array([c[0] for c in coords1]), np.array([c[1] for c in coords1]), '.')
+ax1.set_title('p = 2')
+
+coords2, rejected1  = sample_p_norm(1.5, N)
+ax2.plot(np.array([c[0] for c in coords2]), np.array([c[1] for c in coords2]), '.')
+ax2.set_title('p = 1.5')
+
+coords3, rejected2 = sample_p_norm(0.7, N)
+ax3.plot(np.array([c[0] for c in coords3]), np.array([c[1] for c in coords3]), '.')
+ax3.set_title('p = 0.7')
+
+norms = [1.5, 0.7]
+rates = [rejected1, rejected2]
+
+print "Of {0} points generated for 2-norm ball, Rejection rates:".format(N)
+
+for (p, r) in zip(norms, rates):
+    print "{0:.2f}-norm, {1:.2f}".format(p, r)
