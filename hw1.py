@@ -41,7 +41,9 @@ ax3.set_title('p = 0.7')
 norms = [1.5, 0.7]
 rates = [rejected1, rejected2]
 
-print "Of {0} points generated for 2-norm ball, Rejection rates:".format(N)
+print "Of {0} points generated for 2-norm ball".format(N)
+print "{0}{1}{2}".format("p".ljust(4), " "*5, "rejection_rate")
+print "-"*25
 
 for (p, r) in zip(norms, rates):
-    print "{0:.2f}-norm, {1:.2f}".format(p, r)
+    print "{0:.2f}{1}{2:.2f}".format(p, " "*5, r)
