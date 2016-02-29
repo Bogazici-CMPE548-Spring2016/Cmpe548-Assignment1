@@ -7,7 +7,7 @@ def inversion_2_norm(N):
     r_inverse_cdf = lambda y: math.sqrt(y)
     theta_inverse_cdf = lambda y: 2 * y * math.pi
     polars = [(r_inverse_cdf(np.random.uniform(0,1,1)[0]), theta_inverse_cdf(np.random.uniform(0,1,1)[0])) for i in range(N)]
-    coords = [(r*math.sin(theta), r*math.cos(theta)) for (r, theta) in polars]
+    coords = [(r * math.cos(theta), r * math.sin(theta)) for (r, theta) in polars]
     return coords
 
 def sample_p_norm(p, N):
