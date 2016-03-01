@@ -40,7 +40,7 @@ plt.axis([-2,2,-2,2])
 plt.show()
 
 
-#BONUS
+#BONUS 1
 N = 5000
 dimension = 3
 
