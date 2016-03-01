@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from mpl_toolkits.mplot3d import Axes3D
 
 def getRandomTheta():
 	u = np.random.rand(1)
@@ -57,6 +58,31 @@ def rejectionSampling(p,N,square):
 		plt.plot(x,y,'bo')
 	return float(N) / trial
 
+#used for the BONUS 2
+def getRandomCoordinates(dimension, trial):
+	ones = np.ones(dimension)
+	v = np.random.rand(dimension) * 2 - ones
+	zero = np.zeros(dimension)
+	distance = np.linalg.norm(v-zero)
+	if distance > 1:
+		trial += 1
+		if dimension == 3:
+			ax.scatter(v[0], v[1], v[2], c='r', marker='x')
+		return getRandomCoordinates(dimension, trial)
+	else:
+		return v, trial
+
+#used for the BONUS 2
+def rejectionSamplingBonus(dimension, N):
+	trial = 0
+	v = list()
+	for i in range(N):
+		v, tr = getRandomCoordinates(dimension, 1)
+		trial += tr
+		if dimension == 3:
+			ax.scatter(v[0], v[1], v[2], c='b', marker='o')
+	return float(N) / trial
+
 plt.axis([-2,2,-2,2])
 acceptanceRate = rejectionSampling(1.5, 5000, 1)
 print "p=1.5, 1x1 square, acceptance rate = ", acceptanceRate
@@ -70,3 +96,15 @@ acceptanceRate = rejectionSampling(0.7, 5000, 0)
 print "p=0.7, p=1 norm, acceptance rate = ", acceptanceRate
 plt.show()
 
+#BONUS 2
+dimension = 3
+if dimension==3:
+	fig = plt.figure()
+	ax = fig.add_subplot(111, projection='3d')
+acceptanceRate = rejectionSamplingBonus(dimension, 1000)
+print "n-sphere, n-cube, acceptance rate = ", acceptanceRate
+if dimension == 3:		
+	ax.set_xlabel('X Label')
+	ax.set_ylabel('Y Label')
+	ax.set_zlabel('Z Label')
+	plt.show()
