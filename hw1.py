@@ -12,8 +12,8 @@ def inversion_2_norm(N):
 
 def inversion_1_norm(N):
     #Another norm ball that covers the 0.7-norm and is easy to sample from is 1-norm ball
-    #f(|x1|) ~ 2(1-x1), F(|x1|<y) = 2y-y^2
-    #f(x2|x1) = Uniform(-x1, +x1)
+    #f(|x1|) ~ c_1(1-|x1|)
+    #f(x2|x1) = Uniform(-(1-x1), (1-x1)), ensuring joint distribution being constant for all (x1, x2), hence uniform
     x_inverse_cdf = lambda y: 1- math.sqrt(1 - y)
     x1s_1  = [x_inverse_cdf(np.random.uniform(0, 1, 1)[0]) for i in range(N/2)]
     coords = [(x1, np.random.uniform(x1-1, 1-x1, 1)[0]) for x1 in x1s_1]
@@ -79,3 +79,26 @@ print "-"*40
 
 for (p, prop, r) in zip(norms, proposals, rates):
     print "{0}{s}{1:.2f}{s}{2:.2f}".format(str(prop).ljust(10), p, r, s = " "*5)
+
+def direct_hyperCube(N, dim):
+    hypercube = np.random.uniform(-1, 1, (N, dim))
+    xs  = hypercube[np.sqrt(np.sum(np.power(hypercube, 2), axis = 1)) < 1.0, :]
+    return np.size(xs, 0), xs
+
+from mpl_toolkits.mplot3d import Axes3D
+
+dim = 3
+accepted, xs = direct_hyperCube(10000, 3)
+figure = plt.figure()
+ax = Axes3D(figure)
+ax.set_aspect(1.0)
+ax.plot(xs[:, 0], xs[:, 1], xs[:, 2], '.')
+plt.show()
+
+dims = range(3, 10)
+print "{d}{s}{a}".format("p".ljust(4), d = "Dimensions".ljust(10), s = " "*5, a = "Acceptance Rate")
+print "-"*40
+for d in dims:
+    accepted, xs = direct_hyperCube(N, d)
+    a = accepted/float(N)
+    print "{0}{s}{1:.5f}".format(str(d).ljust(10), a, s = " "*5)
