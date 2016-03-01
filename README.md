@@ -11,5 +11,20 @@ By using rejection sampling (rejected samples are shown by the red crosses) I dr
 For an alternative proposal I sampled from the 1-norm closed unit ball. For doing this I first got u and v coordinates from a coordinate axis which is 45 degrees different from the x-y coordinates. Then I calculated the arc tangent of the u/v, then translated the angle to x-y coordinates. Acceptance rate increased drastically, which became **0.6448** from **0.4055**. You can see the new proposed sampling below: 
 ![alt tag](https://github.com/metehandoyran/Assignment-1/blob/master/figures/figure_5.png?raw=true)
 
-__**BONUS:**__ For the bonus part related to the Q1, I added generic versions of the functions. For getting the direction in n-dimensions I used n-variate gaussian to get a vector(direction), and for radius (r) I used CDF, which increases exponentially (for n=2, P(r)=r^2, for n=3 P(r)=r^3,...). For n=3 dimensions I also plotted the figure below:
+**BONUS 1:** For the bonus part related to the Q1, I added generic versions of the functions. For getting the direction in n-dimensions I used n-variate gaussian to get a vector(direction), and for radius (r) I used CDF, which increases exponentially (for n=2, P(r)=r^2, for n=3 P(r)=r^3,...). For n=3 dimensions I also plotted the figure below:
 ![alt tag](https://github.com/metehandoyran/Assignment-1/blob/master/figures/figure_2.png?raw=true) 
+
+**BONUS 2:** For the last bonus part I've written the code in q2.py file. Depending on the dimension I got n uniform random coodinates from [-1,1] interval. Then I created a 0-vector as n dimensional, and found the euclidean distance between the random point and the zero point. If the distance was bigger than 1, I resampled. Below you can see the 3-dimensional version of it. The acceptance rate table will be below the figure:
+![alt tag](https://github.com/metehandoyran/Assignment-1/blob/master/figures/figure_6.png?raw=true) 
+
+| Dimension | Acceptance Rate |
+|-----------|-----------------|
+| 1         | 1               |
+| 2         | 0.7968          |
+| 3         | 0.5359          |
+| 4         | 0.3214          |
+| 5         | 0.1581          |
+| 6         | 0.0827          |
+| 7         | 0.0362          |
+| 8         | 0.0163          |
+
